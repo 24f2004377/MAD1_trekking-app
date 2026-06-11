@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Details</title>
+</head>
+<body>
+<h1>{{ staff.name }}</h1>
+<p><b>Email: </b>{{ staff.email }}</p>
+<p><b>Status: </b>{{ staff.approved }}</p>
+<p><b>Blacklisted: </b>
+{% if staff.blacklisted %}
+   <p style="color: red;">Yes</p>
+{% else %}
+    No
+{% endif %}
+</p>
+<p><b>Total Treks Assigned:</b> {{ total_treks }}</p>
+<p><b>Open Treks:</b> {{ open_treks }}</p>
+<p><b>Ongoing Treks:</b> {{ ongoing_treks }}</p>
+<p><b>Closed Treks:</b> {{ closed_treks }}</p>
+<p><b>Completed Treks:</b> {{ completed_treks }}</p>
+<p><b>Total Participants Handled:</b> {{ total_participants }}</p>
+<h2>Assigned Treks</h2>
+
+{% for report in trek_reports %}
+
+<hr>
+<h3>{{ report.trek.name }}</h3>
+<p><b>Location:</b> {{ report.trek.location }}</p>
+<p><b>Difficulty:</b> {{ report.trek.difficulty }}</p>
+<p><b>Status:</b> {{ report.trek.status }}</p>
+<p><b>Available Slots:</b> {{ report.trek.available_slots }}</p>
+<p><b>Participants:</b> {{ report.booking_count }}</p>
+<h4>Booked Users</h4>
+
+<ul>
+
+{% for user in report.booked_users %}
+
+<li>
+    {{ user.name }}
+    ({{ user.email }})
+</li>
+
+{% endfor %}
+
+</ul>
+<h4>Cancelled Users</h4>
+
+<ul>
+
+{% for user in report.cancelled_users %}
+
+<li>
+    {{ user.name }}
+    ({{ user.email }})
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% endfor %}
+<h2>Booking History</h2>
+
+<table border="1">
+
+<tr>
+    <th>Trek Name</th>
+    <th>Status</th>
+    <th>Assigned Staff</th>
+</tr>
+
+{% for item in booking_data %}
+
+<tr>
+
+    <td>{{ item.trek.name }}</td>
+
+    <td>{{ item.booking.Status }}</td>
+
+    <td>
+
+        {% if item.staff %}
+
+            {{ item.staff.name }}
+
+        {% else %}
+
+            Not Assigned
+
+        {% endif %}
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+
+</body>
+</html>

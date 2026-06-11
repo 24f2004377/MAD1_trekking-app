@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <title>Edit Trek</title>
+</head>
+<body>
+<div style=" max-width:800px;
+    width:90%;
+    margin:30px auto;
+    padding:30px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(2, 165, 224, 0.74);">
+<h2>Edit Trek</h2>
+
+<a href="/logout" class="btn btn-danger">Logout</a>
+
+<br>
+
+<form method="POST" enctype="multipart/form-data">
+
+     <label>Assign Staff</label>
+       <select name="assigned_staff_id" required class="form-select" aria-label="Default select example">   
+       {% for staff in staff_member %}
+       <option value="{{ staff.id }}">{{ staff.name }}</option>
+       {% endfor %}
+       </select><br>
+
+
+    <input type="text"
+           name="name"
+           class="form-control"
+           value="{{ trek.name }}"
+           placeholder="Trek Name">
+
+    <br>
+
+    <input type="text"
+           name="location"
+           class="form-control"
+           value="{{ trek.location }}"
+           placeholder="Location">
+
+    <br>
+
+    <input type="text"
+           name="duration"
+           class="form-control"
+           value="{{ trek.duration }}"
+           placeholder="Duration">
+
+    <br>
+
+    <input type="number"
+           name="available_slots"
+           class="form-control"
+           value="{{ trek.available_slots }}"
+           placeholder="Available Slots">
+
+    <br>
+
+    <select name="difficulty" class="form-select" aria-label="Default select example">
+        <option value="Easy"
+            {% if trek.difficulty == 'Easy' %}selected{% endif %}>
+            Easy
+        </option>
+
+        <option value="Medium"
+            {% if trek.difficulty == 'Medium' %}selected{% endif %}>
+            Medium
+        </option>
+
+        <option value="Hard"
+            {% if trek.difficulty == 'Hard' %}selected{% endif %}>
+            Hard
+        </option>
+    </select>
+
+    <br>
+
+    <input type="date"
+           name="start_date"
+           class="form-control"
+           value="{{ trek.start_date }}">
+
+    <br>
+
+    <input type="date"
+           name="end_date"
+           class="form-control"
+           value="{{ trek.end_date }}">
+
+    <br>
+
+    {% if trek.image %}
+    <img src="{{ url_for('static', filename=trek.image) }}"
+         class="card-img-top"
+         alt="This is a trek">
+{% else %}
+    <img src="{{ url_for('static', filename='trekking1.jpg') }}"
+         class="card-img-top"
+         alt="Default image">
+{% endif %}
+
+    <input type="file"
+           name="image"
+           class="form-control"
+           accept="image/*">
+
+    <br>
+
+    <input type="text"
+           name="trek_details"
+           class="form-control"
+           value="{{ trek.trek_details }}"
+           placeholder="Trek Details">
+
+    <br>
+
+    <button class="btn btn-dark" type="submit">
+        Update Trek
+    </button>
+
+</form>
+</div>
+
+</body>
+</html>

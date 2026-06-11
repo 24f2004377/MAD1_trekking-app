@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Update Trek</h1>
+
+<form method="POST">
+
+    <label>Available Slots</label>
+
+    <input
+        type="number"
+        name="available_slots"
+        value="{{ trek.available_slots }}"
+    >
+
+    <br><br>
+
+    <label>Status</label>
+
+    <select name="status">
+
+        <option value="Open">Open</option>
+
+        <option value="Ongoing">
+            Ongoing
+        </option>
+
+        <option value="Completed">
+            Completed
+        </option>
+
+        <option value="Closed">
+            Closed
+        </option>
+
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">
+        Update Trek
+    </button>
+
+</form>
+
+</body>
+</html>

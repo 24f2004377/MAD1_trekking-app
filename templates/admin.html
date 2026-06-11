@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Admin</title>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="margin-right: auto;">
+        
+    <div class="container-fluid" style="margin-right: 20px;">
+        <a class="navbar-brand" href="#" style="color: white;">My Trek app</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: 20px;">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" style="color: white;">Home</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#" style="color: white;">Contact us</a>
+            </li>
+            
+        </ul>
+        <a href="/logout" class="btn btn-success" style="margin-left: 800px;">Logout</a>      
+        </div>
+        
+    </div>
+    
+  </nav>
+
+    <h1>Admin Dashboard</h1>
+    <hr>
+    <a href="/pending-staff" class="btn btn-warning">Approve Staff Requests</a>
+    <a href="/create_trek" class="btn btn-primary">Create Trek</a>
+    <br><br>
+    <div style="display:flex; gap:20px; flex-wrap:wrap;">
+
+    <div style="border:2px solid black;padding:20px;width:200px;">
+        <h2>{{ total_users }}</h2>
+        <p>Total Users</p>
+    </div>
+
+    <div style="border:2px solid black;padding:20px;width:200px;">
+        <h2>{{ total_staff }}</h2>
+        <p>Total Staff</p>
+    </div>
+
+    <div style="border:2px solid black;padding:20px;width:200px;">
+        <h2>{{ total_treks }}</h2>
+        <p>Total Treks</p>
+    </div>
+
+    <div style="border:2px solid black;padding:20px;width:200px;">
+        <h2>{{ total_bookings }}</h2>
+        <p>Total Bookings</p>
+    </div>
+
+    <div style="border:2px solid black;padding:20px;width:200px;">
+        <h2>{{ pending_staff }}</h2>
+        <p>Pending Staff</p>
+    </div>
+</div><hr>
+<form method="GET">
+    <input type="text"
+           name="search_trek"
+           placeholder="Search Trek">
+    <button type="submit">Search</button>
+</form>
+{% if request.args.get('search_trek') %}
+<h2>Search Results: {{ treks|length }} trek(s) found</h2>
+{% elif show_all %}
+<h2>All Treks </h2>
+{% else %}
+<h2>Latest Treks</h2>
+{% endif %}
+<div class="row row-cols-3 row-cols-md-3 g-4" style="margin:10px;">
+{% for trek in treks %}
+<div class="col">
+    <div class="card h-100">
+        <img src="{{ url_for('static', filename=trek.image) }}" class="card-img-top" alt="This is a trek" style="height:300px;">
+        <div class="card-body">
+            <h3>{{ trek.name }}</h3>
+            <p><strong>Location:</strong> {{ trek.location }}</p>
+            <p><strong>Duration:</strong> {{ trek.duration }}</p>
+            <p><strong>Available Slots:</strong> {{ trek.available_slots }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+</div>
+<a href="/all_treks" class="btn btn-primary" style="align-content: center;">View All Treks</a>
+<hr>
+
+
+<form method="GET">
+    <input type="text"
+           name="search_user"
+           placeholder="Search User">
+
+    <button type="submit">
+        Search
+    </button>
+</form>
+
+{% if request.args.get('search_user') %}
+
+<h2>Search Results: {{ user_list|length }} user(s) found</h2>
+{% elif show_all_users %}
+<h2>All Users </h2>
+{% else %}
+
+{% endif %}
+
+<h2>Available Users are: {{ active_users_count}}</h2>
+<div class="row row-cols-3 row-cols-md-3 g-4" style="margin: 10px;">
+{% if user_list %}
+    {% for user in user_list %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ user.name }}</h5>
+                <p class="card-text"><strong>Email:</strong>{{ user.email }}</p>
+                <p class="card-text"><strong>Approved:</strong>{{ user.approved }}</p>
+                <p class="card-text"><strong>Status:</strong>
+                    {% if user.blacklisted %}
+                        Blacklisted
+                    {% else %}
+                        Active
+                    {% endif %}
+                </p>
+                {% if not user.blacklisted %}
+                    <a href="/blacklist_user/{{ user.id }}" class="btn btn-danger">Blacklist</a>
+                {% else %}
+                    <span class="badge bg-danger">Blocked</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <h3>No Users Found</h3>
+{% endif %}
+</div>
+<a href="/all_users" class="btn btn-primary" style="align-content: center;">View All Users</a>
+
+
+<hr>
+
+
+<form method="GET">
+    <input type="text"
+           name="search_staff"
+           placeholder="Search Staff">
+
+    <button type="submit">
+        Search
+    </button>
+</form>
+
+{% if request.args.get('search_staff') %}
+
+<h2>Search Results: {{ staff_list|length }} staff(s) found</h2>
+{% elif show_all_staff %}
+<h2>All Staff </h2>
+{% else %}
+
+{% endif %}
+
+<h2>Available Staff are: {{ active_staff_count}}</h2>
+<div class="row row-cols-3 row-cols-md-3 g-4" style="margin: 10px;">
+{% if staff_list %}
+    {% for staff in staff_list %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ staff.name }}</h5>
+                <p class="card-text"><strong>Email:</strong>{{ staff.email }}</p>
+                <p class="card-text"><strong>Approved:</strong>{{ staff.approved }}</p>
+                <p class="card-text"><strong>Status:</strong>
+                    {% if staff.blacklisted %}
+                        Blacklisted
+                    {% else %}
+                        Active
+                    {% endif %}
+                </p>
+                {% if not staff.blacklisted %}
+                    <a href="/blacklist_staff/{{staff.id }}" class="btn btn-danger">Blacklist</a>
+                {% else %}
+                    <span class="badge bg-danger">Blocked</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <h3>No staff Found</h3>
+{% endif %}
+</div>
+<a href="/all_staff" class="btn btn-primary" style="align-content: center;">View All staffs</a>
+
+
+<hr>
+<form method="GET">
+    <input type="text"
+           name="search_staff"
+           placeholder="Search Staff">
+    <button type="submit">Search</button>
+</form>
+<h2>Available Staff Members are: {{ staff_list|length }}</h2>
+<div class="row row-cols-3 row-cols-md-3 g-4" style="margin: 10px;">
+
+{% if staff_list %}
+    {% for user in staff_list %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ user.name }}</h5>
+                <p class="card-text"><strong>Email:</strong>{{ user.email }}</p>
+                <p class="card-text"><strong>Approved:</strong>{{ user.approved }}</p>
+                <p class="card-text"><strong>Status:</strong>
+                    {% if user.blacklisted %}
+                        Blacklisted
+                    {% else %}
+                        Active
+                    {% endif %}
+                </p>
+                {% if not user.blacklisted %}
+                    <a href="/blacklist_user/{{ user.id }}" class="btn btn-danger">Blacklist</a>
+                {% else %}
+                    <span class="badge bg-danger">Blocked</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <h3>No Users Found</h3>
+{% endif %}
+
+</div>
+
+
+<hr>
+<hr>
+
+<h2>Booking History</h2>
+<div class="row row-cols-3 g-4">
+{% for trek in history_treks %}
+<div class="col">
+    <div class="card">
+        <div class="card-body">
+            <h4>{{ trek.name }}</h4>
+            <p><b>Status:</b>{{ trek.status }}</p>
+            <p><b>Location:</b>{{ trek.location }}</p>
+            <a href="/trek_details/{{ trek.id }}" class="btn btn-info">View Details</a>
+
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+</div>
+
+<h2 style="text-align: center;">Staff Members</h2>
+<div style="border: 2px solid black;align-self: center;">
+<div class="container text-center" >
+  <div class="row row-cols-4">
+    <div class="col" ><b>ID</b></div>
+    <div class="col"><b>Name</b></div>
+    <div class="col"><b>Email</b></div>
+    <div class="col"><b>Approved</b></div>
+  </div>
+</div>
+{% for staff in staff_list %}
+<div class="container text-center">
+  <div class="row row-cols-4">
+    <div class="col">{{ staff.id }}</div>
+    <div class="col">{{ staff.name }}</div>
+    <div class="col">{{ staff.email }}</div>
+    <div class="col">{{ staff.approved }}</div>
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<br><br>
+<h2 style="text-align: center;">Users</h2>
+<div style="border: 2px solid black;align-self: center;">
+<div class="container text-center">
+  <div class="row row-cols-4">
+    <div class="col"><b>ID</b></div>
+    <div class="col"><b>Name</b></div>
+    <div class="col"><b>Email</b></div>
+    <div class="col"><b>Approved</b></div>
+  </div>
+</div>
+{% for user in user_list %}
+<div class="container text-center">
+  <div class="row row-cols-4">
+    <div class="col">{{ user.id }}</div>
+    <div class="col">{{ user.name }}</div>
+    <div class="col">{{ user.email }}</div>
+    <div class="col">{{ user.approved }}</div>
+  </div>
+</div>
+{% endfor %}
+</div>
+<br><br>
+<h2 style="text-align: center;">Booking Report</h2>
+<div style="border: 2px solid black;align-self: center;">
+<div class="container text-center">
+  <div class="row row-cols-5">
+    <div class="col"><b>Booking ID</b></div>
+    <div class="col"><b>User</b></div>
+    <div class="col"><b>Trek</b></div>
+    <div class="col"><b>Date</b></div>
+    <div class="col"><b>Status</b></div>
+  </div>
+</div>
+{% for item in booking_data %}
+<div class="container text-center">
+  <div class="row row-cols-5">
+    <div class="col">{{ item.booking.Booking_ID }}</div>
+    <div class="col">{{ item.user.name }}</div>
+    <div class="col">{{ item.trek.name }}</div>
+    <div class="col">{{ item.booking.Booking_Date }}</div>
+    <div class="col">{{ item.booking.Status }}</div>
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<br><br>
+<h2 style="text-align: center;">Cancelled Bookings</h2>
+<div style="border: 2px solid black;align-self: center;">
+<div class="container text-center">
+  <div class="row row-cols-5">
+    <div class="col"><b>Booking ID</b></div>
+    <div class="col"><b>User</b></div>
+    <div class="col"><b>Trek</b></div>
+    <div class="col"><b>Date</b></div>
+    <div class="col"><b>Status</b></div>
+  </div>
+</div>
+{% for group in booking_data|groupby('trek.name') %}
+<h3>{{ group.grouper }}</h3>
+{% for item in group.list %}
+{% if item.booking.Status == "Cancelled" %}
+<div class="container text-center">
+  <div class="row row-cols-5">
+    <div class="col">{{ item.booking.Booking_ID }}</div>
+    <div class="col">{{ item.user.name }}</div>
+    <div class="col">{{ item.trek.name }}</div>
+    <div class="col">{{ item.booking.Booking_Date }}</div>
+    <div class="col">{{ item.booking.Status }}</div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+<br>{% endfor %}
+</div>
+
+<br><br>
+
+<h2 style="text-align: center;">Blacklist Management for Staff</h2>
+<div style="border: 2px solid black;align-self: center;">
+<div class="container text-center">
+  <div class="row row-cols-5">
+    <div class="col"><b>ID</b></div>
+    <div class="col"><b>Name</b></div>
+    <div class="col"><b>Email</b></div>
+    <div class="col"><b>Status</b></div>
+    <div class="col"><b>Action</b></div>
+  </div>
+</div>
+{% for staff in staff_list %}
+<div class="container text-center">
+  <div class="row row-cols-5">
+    <div class="col">{{ staff.id }}</div>
+    <div class="col">{{ staff.name }}</div>
+    <div class="col">{{ staff.email }}</div>
+    <div class="col">{% if staff.blacklisted %}
+            Blacklisted
+        {% else %}
+            Active
+        {% endif %}</div>
+    <div class="col">{% if not staff.blacklisted %}
+        <a href="/blacklist_user/{{ staff.id }}"
+           class="btn btn-danger">
+           Blacklist
+        </a>
+        {% else %}
+        Blocked
+        {% endif %}</div>
+  </div>
+</div>
+{% endfor %}
+</div>
+<br><br>
+
+</body>
+</html>

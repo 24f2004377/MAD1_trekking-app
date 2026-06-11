@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>All Treks</title>
+</head>
+<body>
+    <form method="GET">
+
+    <input type="text"
+           name="search"
+           placeholder="Search Trek">
+
+    <button type="submit">
+        Search
+    </button>
+</form>
+<hr>
+<h2>Total Treks Found : {{ treks|length }}</h2>
+<div class="row row-cols-3 g-4">
+{% for trek in treks %}
+<div class="col">
+    <div class="card h-100">
+        <img src="{{ url_for('static', filename=trek.image) }}" class="card-img-top">
+        <div class="card-body">
+            <h5>{{ trek.name }}</h5>
+            <p>{{ trek.location }}</p>
+            <p>{{ trek.duration }}</p>
+            <p>{{ trek.difficulty }}</p>
+            <a href="/trek_details/{{ trek.id }}" class="btn btn-info">View Trek Details</a>
+            <a href="/delete_trek/{{ trek.id }}"class="btn btn-danger">Delete</a>
+            <a href="/edit_trek/{{ trek.id }}"class="btn btn-primary">Edit</a>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+</body>
+</html>

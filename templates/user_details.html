@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+</head>
+<body>
+<h1>{{ user.name }}</h1>
+<p><b>Email: </b>{{ user.email }}</p>
+<p><b>Status: </b>{{ user.approved }}</p>
+<p><b>Blacklisted: </b>
+{% if user.blacklisted %}
+    Yes
+{% else %}
+    No
+{% endif %}
+</p>
+<h2>User Statistics</h2>
+<p><b>Total Bookings:</b> {{ total_bookings }}</p>
+<p><b>Current Treks:</b> {{ current_treks }}</p>
+<p><b>Cancelled Treks:</b> {{ cancelled_treks }}</p>
+<h2>Current Treks</h2>
+
+<table border="1">
+
+<tr>
+    <th>Trek</th>
+    <th>Location</th>
+    <th>Status</th>
+</tr>
+
+{% for item in current_bookings %}
+
+<tr>
+    <td>{{ item.trek.name }}</td>
+    <td>{{ item.trek.location }}</td>
+    <td>{{ item.booking.Status }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+<h2>Booking History</h2>
+
+<table border="1">
+
+<tr>
+    <th>Trek Name</th>
+    <th>Status</th>
+    <th>Assigned Staff</th>
+</tr>
+
+{% for item in booking_data %}
+
+<tr>
+
+    <td>{{ item.trek.name }}</td>
+
+    <td>{{ item.booking.Status }}</td>
+
+    <td>
+
+        {% if item.staff %}
+
+            {{ item.staff.name }}
+
+        {% else %}
+
+            Not Assigned
+
+        {% endif %}
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+
+</body>
+</html>

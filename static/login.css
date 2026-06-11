@@ -1,0 +1,13 @@
+
+    
+
+    .center-box {
+        width: 400px;         
+        margin: 60px auto;
+        padding: 25px;
+        background: white;
+        border-radius: 15px; /* semi-rounded corners */
+        border: 2px solid #0d6efd; /* highlighted border */
+        box-shadow: 0 0 20px rgba(13, 110, 253, 0.3); /* glow effect */
+        text-align: center;
+    }

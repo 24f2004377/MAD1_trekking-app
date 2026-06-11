@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trek details</title>
+</head>
+<body>
+<h1>{{ trek.name }}</h1>
+<p><b>Location:</b>{{ trek.location }}</p>
+<p><b>Difficulty:</b>{{ trek.difficulty }}</p>
+<p><b>Duration:</b>{{ trek.duration }}</p>
+<p><b>Status:</b>{{ trek.status }}</p>
+<p><b>Available Slots:</b>{{ trek.available_slots }}</p>
+<h2>Assigned Staff</h2>
+{% if staff %}
+<p>{{ staff.name }}</p>
+<p>{{ staff.email }}</p>
+{% else %}
+<p>No Staff Assigned</p>
+{% endif %}
+<h2>Users and Booking Status</h2>
+<table border="1">
+<tr>
+    <th>User</th>
+    <th>Email</th>
+    <th>Status</th>
+    <th>Booking Date</th>
+</tr>
+{% for item in booking_details %}
+<tr>
+    <td>{{ item.user.name }}</td>
+    <td>{{ item.user.email }}</td>
+    <td>{{ item.booking.Status }}</td>
+    <td>{{ item.booking.Booking_Date }}</td>
+</tr>
+{% endfor %}
+</table>  
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <h2>Assign Staff to Trek</h2>
+
+<h3>{{ trek.name }}</h3>
+
+<form method="POST">
+
+<select name="staff_id">
+
+{% for staff in staff_members %}
+
+<option value="{{ staff.id }}">
+    {{ staff.name }}
+</option>
+
+{% endfor %}
+
+</select>
+
+<br><br>
+
+<button type="submit">
+    Assign Staff
+</button>
+
+</form>
+
+</body>
+</html>

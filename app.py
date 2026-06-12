@@ -116,7 +116,7 @@ def admin():
     if search_staff:
         staff_list = User.query.filter(User.role == 'staff',User.name.ilike(f'%{search_staff}%')).all()
     else:
-        staff_list = User.query.filter_by(role='staff').all()
+        staff_list = User.query.filter_by(role='staff').order_by(User.id.desc()).limit(3).all()
     return render_template(
         'admin.html',total_users=total_users,
         total_staff=total_staff,
@@ -675,5 +675,58 @@ def user_bookings_api(user_id):
 
 
     return jsonify(data)
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+    user = User.query.get(session['user_id'])
+    if request.method == 'POST':
+        user.name = request.form['name']
+        user.email = request.form['email']
+        password = request.form['password']
+        if password:
+            user.password = generate_password_hash(password)
+        db.session.commit()
+        if user.role == 'staff':
+            return redirect('/staff')
+        return redirect('/user_dashboard')
+    return render_template('edit_profile.html',user=user)
+@app.route('/participants/<int:trek_id>')
+def participants(trek_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    if session['role'] != 'staff':
+        return "Access Denied"
+    trek = Trek.query.get(trek_id)
+    booked_users = []
+    cancelled_users = []
+    
+    bookings = Booking.query.filter_by(
+        Trek_ID=trek_id
+    ).all()
+
+
+    for booking in bookings:
+        user = User.query.get(booking.User_ID)
+        if booking.Status == 'Booked':
+            booked_users.append({
+                'user': user,
+                'booking': booking
+            })
+
+        elif booking.Status == 'Cancelled':
+            cancelled_users.append({
+                'user': user,
+                'booking': booking
+            })
+
+    return render_template(
+        'participants.html',
+        trek=trek,
+        booked_users=booked_users,
+        cancelled_users=cancelled_users
+    )
+
+
 if __name__ == '__main__':
     app.run(debug=True)

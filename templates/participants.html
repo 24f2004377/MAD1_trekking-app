@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>{{ trek.name }}</h2>
+
+<h2>Booked Users</h2>
+
+<p>
+<b>Total:</b>
+{{ booked_users|length }}
+</p>
+
+<table border="1">
+
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Booking Date</th>
+</tr>
+
+{% for item in booked_users %}
+
+<tr>
+    <td>{{ item.user.name }}</td>
+    <td>{{ item.user.email }}</td>
+    <td>{{ item.booking.Booking_Date }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+<h2>Cancelled Users</h2>
+
+<p>
+<b>Total:</b>
+{{ cancelled_users|length }}
+</p>
+
+<table border="1">
+
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Booking Date</th>
+</tr>
+
+{% for item in cancelled_users %}
+
+<tr>
+    <td>{{ item.user.name }}</td>
+    <td>{{ item.user.email }}</td>
+    <td>{{ item.booking.Booking_Date }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+</body>
+</html>

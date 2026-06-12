@@ -27,7 +27,8 @@
             
         </ul>
         <a href="/logout" class="btn btn-success" style="margin-left: 800px;">Logout</a>      
-        </div>
+    <a href="/edit_profile" class="btn btn-warning">Edit Profile</a>    
+    </div>
         
     </div>
     
@@ -67,6 +68,14 @@
        Update
     </a>
 </td>
+<p>
+    <b>Total Participants:</b>
+    {{ item.users|length }}
+</p>
+<a href="/participants/{{ item.trek.id }}"
+   class="btn btn-info">
+   View Participants
+</a>
 
 <div class="card p-3 m-3">
 

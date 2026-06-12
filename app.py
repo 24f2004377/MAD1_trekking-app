@@ -222,12 +222,10 @@ def create_trek():
         start_date = datetime.strptime(request.form['start_date'],'%Y-%m-%d').date()
         end_date = datetime.strptime(request.form['end_date'],'%Y-%m-%d').date()
         image = request.files.get('image')
-        filename = None
-        if image and image.filename:
-            filename = secure_filename(image.filename)
-            image.save(os.path.join('static', filename))
-        else:
-            filename="trekking_1.jpg"
+        if not image or image.filename == '':
+            return "Please upload an image"
+        filename = secure_filename(image.filename)
+        image.save(os.path.join('static', filename))
         trek_details = request.form['trek_details']
         trek = Trek(
             name=name,
@@ -784,3 +782,4 @@ def add_participant(trek_id):
     )
 if __name__ == '__main__':
     app.run(debug=True)
+    

@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="margin-right: auto;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="margin-right: 20px;">
         
     <div class="container-fluid" style="margin-right: 20px;">
         <a class="navbar-brand" href="#" style="color: white;">My Trek app</a>
@@ -22,20 +22,20 @@
             <a class="nav-link active" aria-current="page" href="#" style="color: white;">Home</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#" style="color: white;">Contact us</a>
+            <a class="nav-link" href="#footer" style="color: white;">Contact us</a>
             </li>
             
         </ul>
-        <a href="/logout" class="btn btn-success" style="margin-left: 800px;">Logout</a>      
-    <a href="/edit_profile" class="btn btn-warning">Edit Profile</a>    
-    </div>
-        
+        </div>
+        <a href="/logout" class="btn btn-success" style="margin-right: 20px;">Logout</a>      
+    <a href="/edit_profile" class="btn btn-warning " style="margin-right: 20px;">Edit Profile</a>    
+    
     </div>
     
   </nav>
 
 
-<h2>All Treks</h2>
+<h2 style="text-align: center;">All Treks</h2>
 <table class="table">
     <tr>
         <th>Name</th>
@@ -50,58 +50,115 @@
     </tr>
     {% endfor %}
 </table>
-<h1>My Assigned Treks</h1>
-{% for trek in assigned_treks %}
-<div>
-    <h3>{{ trek.name }}</h3>
-    <p>{{ trek.location }}</p>
-    <p>{{ trek.difficulty }}</p>
-    <th>Action</th>
+
+<h1 class="text-center">My Treks and Participants</h1>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for item in trek_user_report %}
+        <div class="col">
+            <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h4 class="card-title">{{ item.trek.name }}</h4>
+                    <p><b>Location: </b>{{ item.trek.location }}</p>
+                    <p><b>Status: </b>{{ item.trek.status }}</p>
+                    <p><b>Difficulty: </b>{{ item.trek.difficulty }}</p>
+                    <p><b>Total Participants:</b>{{ item.users|length }}</p>
+                    <div class="mb-3">
+                        <a href="/staff_edit_trek/{{ item.trek.id }}" class="btn btn-warning btn-sm">Update</a>
+                        <a href="/participants/{{ item.trek.id }}" class="btn btn-info btn-sm">Participants</a>
+                    </div>
+                    <h6>Participants:</h6>
+                    <ul>
+                    {% for user in item.users[:3] %}
+                        <li>{{ user.name }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% if item.users|length > 3 %}
+                        <small>and {{ item.users|length - 3 }} more...</small>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
 </div>
-{% endfor %}
-<h1>My Treks and Participants</h1>
+<footer id="footer" class="bg-dark text-white mt-5">
 
-{% for item in trek_user_report %}
-<td>
-    <a href="/staff_edit_trek/{{ item.trek.id }}"
-       class="btn btn-warning">
-       Update
-    </a>
-</td>
-<p>
-    <b>Total Participants:</b>
-    {{ item.users|length }}
-</p>
-<a href="/participants/{{ item.trek.id }}"
-   class="btn btn-info">
-   View Participants
-</a>
+<div class="container py-4">
 
-<div class="card p-3 m-3">
+    <div class="row">
 
-    <h3>{{ item.trek.name }}</h3>
+        <!-- Staff Panel -->
+        <div class="col-md-4">
 
-    <p>Location: {{ item.trek.location }}</p>
+            <h4>Staff Dashboard</h4>
 
-    <p>Participants:</p>
-    
-    <ul>
+            <p>
+                Manage assigned treks, monitor participants,
+                update trek status, and ensure a safe and
+                enjoyable trekking experience for all users.
+            </p>
 
-    {% for user in item.users %}
+        </div>
 
-        <li>
-            {{ user.name }}
-            ({{ user.email }})
-        </li>
+        <!-- Quick Actions -->
+        <div class="col-md-4">
 
-    {% endfor %}
+            <h4>Quick Actions</h4>
 
-    </ul>
-    <td>{{ item.trek.status }}</td>
+            <ul class="list-unstyled">
+
+                <li>✓ View Assigned Treks</li>
+
+                <li>✓ Manage Participants</li>
+
+                <li>✓ Update Trek Status</li>
+
+                <li>✓ Edit Profile</li>
+
+            </ul>
+
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4">
+
+            <h4>Support</h4>
+
+            <p>📧 staffsupport@trekapp.com</p>
+
+            <p>📞 +91 98765 43210</p>
+
+            <p>📍 Trek Operations Center</p>
+
+            <p>
+                Need assistance? Contact the administrator.
+            </p>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="text-center">
+
+        <p class="mb-0">
+            © 2026 Trek Management System |
+            Staff Management Portal
+        </p>
+
+    </div>
 
 </div>
 
-{% endfor %}
+</footer>
 
 </body>
 </html>

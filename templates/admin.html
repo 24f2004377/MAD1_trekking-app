@@ -21,12 +21,12 @@
             <a class="nav-link active" aria-current="page" href="#" style="color: white;">Home</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#" style="color: white;">Contact us</a>
+            <a class="nav-link" href="#footer" style="color: white;">Contact us</a>
             </li>
         </ul>       
         </div>
         <a href="/logout" class="btn btn-success" style="margin-right: 10px;">Logout</a>     
-        
+       
     </div>
     
   </nav>
@@ -280,6 +280,101 @@
 </div>
 
 <br><br>
+<footer id="footer" class="bg-dark text-white mt-5">
+
+<div class="container py-4">
+
+    <div class="row">
+
+        <!-- Admin Panel -->
+        <div class="col-md-4">
+
+            <h4>Administrator Panel</h4>
+
+            <p>
+                Monitor users, manage staff approvals,
+                oversee treks, analyze bookings, and
+                ensure smooth operation of the Trek
+                Management System.
+            </p>
+
+        </div>
+
+        <!-- Management Features -->
+        <div class="col-md-4">
+
+            <h4>Administration</h4>
+
+            <ul class="list-unstyled">
+
+                <li>✓ Manage Treks</li>
+
+                <li>✓ Manage Users</li>
+
+                <li>✓ Approve Staff Members</li>
+
+                <li>✓ Monitor Bookings</li>
+
+                <li>✓ View Reports & Statistics</li>
+
+            </ul>
+
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-4">
+
+            <h4>System Support</h4>
+
+            <p>📧 adminsupport@trekapp.com</p>
+
+            <p>📞 +91 98765 43210</p>
+
+            <p>📍 Headquarters, New Delhi</p>
+
+            <p>
+                For technical assistance, contact the
+                system administrator.
+            </p>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="row text-center">
+
+        <div class="col-md-4">
+            <h5>{{ total_users }}</h5>
+            <small>Registered Users</small>
+        </div>
+
+        <div class="col-md-4">
+            <h5>{{ total_staff }}</h5>
+            <small>Staff Members</small>
+        </div>
+
+        <div class="col-md-4">
+            <h5>{{ total_treks }}</h5>
+            <small>Total Treks</small>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="text-center">
+
+        <p class="mb-0">
+            © 2026 Trek Management System |
+            Administrator Dashboard
+        </p>
+
+    </div>
+
+</div>
+</footer>
 
 </body>
 </html>

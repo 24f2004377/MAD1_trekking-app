@@ -726,7 +726,61 @@ def participants(trek_id):
         booked_users=booked_users,
         cancelled_users=cancelled_users
     )
-
-
+@app.route('/remove_participant/<int:booking_id>')
+def remove_participant(booking_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    if session['role'] != 'staff':
+        return "Access Denied"
+    booking = Booking.query.get(booking_id)
+    if not booking:
+        return "Booking Not Found"
+    trek = Trek.query.get(booking.Trek_ID)
+    booking.Status = 'Cancelled'
+    trek.available_slots += 1
+    db.session.commit()
+    return redirect(request.referrer)
+@app.route('/add_participant/<int:trek_id>', methods=['GET', 'POST'])
+def add_participant(trek_id):
+    if 'user_id' not in session:
+        return redirect('/login')
+    if session['role'] != 'staff':
+        return "Access Denied"
+    trek = Trek.query.get(trek_id)
+    if not trek:
+        return "Trek Not Found"
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        existing_booking = Booking.query.filter_by(
+            User_ID=user_id,
+            Trek_ID=trek_id
+        ).first()
+        if existing_booking:
+            return "User already booked for this trek"
+        if trek.available_slots <= 0:
+            return "No slots available"
+        booking = Booking(
+            User_ID=user_id,
+            Trek_ID=trek_id,
+            Booking_Date=date.today(),
+            Status='Booked'
+        )
+        trek.available_slots -= 1
+        db.session.add(booking)
+        db.session.commit()
+        return redirect(f'/participants/{trek_id}')
+    available_users = []
+    for user in User.query.filter_by(role='user').all():
+        existing = Booking.query.filter_by(
+            User_ID=user.id,
+            Trek_ID=trek_id
+        ).first()
+        if not existing and not user.blacklisted:
+            available_users.append(user)
+    return render_template(
+        'add_participant.html',
+        trek=trek,
+        available_users=available_users
+    )
 if __name__ == '__main__':
     app.run(debug=True)

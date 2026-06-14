@@ -62,7 +62,32 @@
         <h2>{{ pending_staff }}</h2>
         <p>Pending Staff</p>
     </div>
-</div><hr>
+</div>
+<hr>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <h2>Trek Statistics</h2>
+            <img src="{{ url_for('static', filename='trek_chart.png') }}" 
+                 class="img-fluid" alt="Trek Statistics">
+        </div>
+
+        <div class="col-md-4 text-center">
+            <h2>Booking Analysis</h2>
+            <img src="{{ url_for('static', filename='booking_status_chart.png') }}" 
+                 class="img-fluid" alt="Booking Analysis">
+        </div>
+        
+
+        <div class="col-md-4 text-center">
+            <h2 class="text-center"> User Distribution</h2>
+            <img src="{{ url_for('static', filename='user_distribution_chart.png') }}"
+                class="img-fluid">
+
+        </div>
+    </div>
+</div>
+<hr>
 <form method="GET">
     <input type="text"
            name="search_trek"

@@ -8,6 +8,10 @@ import os
 from flask import flash
 from flask import jsonify
 from models import User, Trek, Booking
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret123'
@@ -117,6 +121,39 @@ def admin():
         staff_list = User.query.filter(User.role == 'staff',User.name.ilike(f'%{search_staff}%')).all()
     else:
         staff_list = User.query.filter_by(role='staff').order_by(User.id.desc()).limit(3).all()
+
+
+    trek_names = []
+    booking_counts = []
+    for trek in Trek.query.all():
+        trek_names.append(trek.name)
+        booking_counts.append(
+            Booking.query.filter_by(Trek_ID=trek.id, Status='Booked').count())
+    plt.figure(figsize=(8,5))
+    plt.bar(trek_names, booking_counts)
+    plt.title("Most Popular Treks")
+    plt.xlabel("Treks")
+    plt.ylabel("Bookings")
+    plt.xticks(rotation=30)
+    plt.tight_layout()
+    plt.savefig(os.path.join('static','trek_chart.png'))
+    plt.close()
+    booked = Booking.query.filter_by(Status='Booked').count()
+    cancelled = Booking.query.filter_by(Status='Cancelled').count()
+    plt.figure(figsize=(6,6))
+    plt.pie([booked, cancelled],labels=['Booked','Cancelled'],autopct='%1.1f%%')
+    plt.title("Booking Status")
+    plt.savefig(os.path.join('static', 'booking_status_chart.png'))
+    plt.close()
+    users_count = User.query.filter_by(role='user').count()
+    staff_count = User.query.filter_by(role='staff', approved=True).count()
+    pending_staff_count = User.query.filter_by(role='staff',approved=False).count()
+    plt.figure(figsize=(6,6))
+    plt.pie([users_count,staff_count, pending_staff_count],
+        labels=['Users','Approved Staff','Pending Staff'],autopct='%1.1f%%')
+    plt.title("User Distribution")
+    plt.savefig(os.path.join('static', 'user_distribution_chart.png'))
+    plt.close()
     return render_template(
         'admin.html',total_users=total_users,
         total_staff=total_staff,
